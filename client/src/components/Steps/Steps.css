@@ -1,0 +1,5 @@
+#current-step{
+    color: var(--red);
+    font-size: 2rem;
+    text-decoration: underline;
+}

@@ -1,0 +1,11 @@
+#voting-logo {
+    width: 100px;
+}
+#voting-banner{
+    display: flex;
+    align-items: center;
+}
+#voting-banner-image{
+    width: 100%;
+    max-height: 200px;
+}

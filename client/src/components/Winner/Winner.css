@@ -1,0 +1,6 @@
+#winner-is{
+    font-size: 3em;
+    font-weight: bold;
+    text-decoration: underline;
+    color: var(--red);
+}

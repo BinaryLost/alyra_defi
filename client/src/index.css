@@ -1,0 +1,33 @@
+@font-face {
+  font-family: "Reactor";
+  src: local("Reactor"),
+  url("./fonts/Reactor_Sans_Regular.ttf") format("truetype");
+  font-weight: bold;
+}
+
+html {
+  font-size: 10px;
+  font-family: sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  background: url(assets/background-app.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#root {
+  width: 100vw;
+  height: 100%;
+}
+
+h1,h2{
+  font-family: Reactor;
+}

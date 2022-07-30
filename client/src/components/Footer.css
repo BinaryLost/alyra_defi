@@ -1,0 +1,9 @@
+footer{
+  background-color: var(--primary-color);
+}
+a{
+  color: #000;
+}
+a:hover{
+  color: var(--green);
+}
