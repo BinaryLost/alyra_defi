@@ -1,24 +1,9 @@
-# Stéphane Moriggi Dapp projet 3 Alyra
+# Group C projet 4 Alyra: DEFI
 
-## Truffle 
-- Faille DoS proposals: Ajout d'une limitation d'ajout sur **addProposal() L.78** de voting pour éviter faille DoS lors de la boucle TallyVote
-- Commentaires ok
+## 30/07/2022 - Mickael,  Stephane, Nordine
 
-## Lien de la  vidéo de présentation du Front Loom
-https://www.loom.com/share/93d112897a5a433193bc420e7ef6bb74
+- création du repo BinaryLost/alyra_defi
+- création d'un truffle init et commit sur le repo
+- partage des infos ( exemple de front, lien d'un smart contract de staking)
+- prise du nouveau meet 31/07/2022 9:30
 
-## Client
-- Plusieurs méthodes de récupération des events ok 
-- Affichage customisé pour Owner Voter etc ..
-- Vidéo workflow ok 
-- Intégralité des fonctions courvertes ok
-- Affichage voters, proposals, steps, winner OK
-- components variés ok 
-- Affichage adresses contrat et user ok
-- css ok
-- déploiement public ok
-
-## Lien du gh-page 
-(à titre informatif car droits Owner nécessaire)
-
-- https://binarylost.github.io/BinaryLost-alyra_project_dapp/
