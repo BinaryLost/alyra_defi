@@ -1,56 +1,27 @@
 #App {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  --primary-color: #4FC7FF;
-  --secondary-color: #3F88C5;
-  --green: #136F63;
-  --yellow: #ffba08;
-  --red: #d00000;
+    --grey-light: #F6F6F5;
+    --grey-dark: #565656;
+    --grey-middle: #B4B4BF;
+    --yellow: #FFF467;
+    width: 100%;
+    height: 100vh;
+    max-height: 80%;
+    background-color: var(--grey-light);
+    padding: 1em;
 }
 
-#App .container {
-  background: rgb(255,255,255,0.5);
-  width: 100%;
-  min-width: 60rem;
-  max-width: 75rem;
-  height: 100%;
-  padding: 30px;
+#App *
+{
+    color: var(--grey-dark);
+}
+#App > .container{
+    border: 10px solid var(--grey-dark);
+    border-radius: 30px;
+    height: 100%;
+    display: flex;
+    overflow: hidden;
 }
 
-#App .sub-container {
-  padding: 20px;
-}
-
-#App .container footer {
-  padding-bottom: 7.5rem;
-}
-
-#App .container footer a {
-  display: inline-block;
-  margin: 2rem 1rem 0 0;
-}
-
-#App input{
-  max-width: 600px;
-  width: 100%;
-  padding: 1em;
-}
-
-#App .section-block{
-  margin: 2em 0;
-}
-
-#App .flash{
-  color: var(--red);
-}
-
-.bold{
-  font-weight: bold;
-}
-#App .component-section{
-  margin:3em 0;
+#App > .container #main{
+    padding: 2em;
 }
