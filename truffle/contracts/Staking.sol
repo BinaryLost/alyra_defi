@@ -167,4 +167,11 @@ contract Staking is ReentrancyGuard {
     function getStaked() external view returns (uint256) {
         return s_balances[msg.sender];
     }
+
+    /**
+     * @notice montant staked pour un user
+     */
+    function getStakedValue() external view returns (uint256) {
+        return s_balances[msg.sender];
+    }
 }
