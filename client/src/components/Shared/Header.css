@@ -1,0 +1,7 @@
+header{
+    display: flex;
+}
+
+header button{
+    margin-left: auto !important;
+}

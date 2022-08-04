@@ -1,0 +1,25 @@
+#App button
+{
+    background-color: var(--grey-middle);
+    color: white;
+    font-size: 20px;
+    padding: 10px 60px;
+    border-radius: 5px;
+    margin: 10px 0px;
+    cursor: pointer;
+}
+
+#App button:hover
+{
+    background-color: var(--grey-dark);
+}
+
+#App button.not-clickable
+{
+    cursor: auto;
+}
+
+#App button.not-clickable:hover
+{
+    background-color: var(--grey-middle);
+}
