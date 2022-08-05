@@ -7,22 +7,28 @@ function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const init = useCallback(
-    async artifact => {
-      if (artifact) {
+    async (artifact, rewardTokenArtifact) => {
+      if ((artifact)&&(rewardTokenArtifact)) {
         const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
         const accounts = await web3.eth.requestAccounts();
         const networkID = await web3.eth.net.getId();
         const { abi } = artifact;
-        let address, contract;
+        const rewardTokenAbi  = rewardTokenArtifact.abi;
+
+        let address, contract, rewardTokenAddress, rewardTokenContract;
         try {
           address = artifact.networks[networkID].address;
           contract = new web3.eth.Contract(abi, address);
+
+          rewardTokenAddress = rewardTokenArtifact.networks[networkID].address;
+          rewardTokenContract = new web3.eth.Contract(rewardTokenAbi, rewardTokenAddress);
+          
         } catch (err) {
           console.error(err);
         }
         dispatch({
           type: actions.init,
-          data: { artifact, web3, accounts, networkID, contract }
+          data: { artifact, rewardTokenArtifact, web3, accounts, networkID, contract, rewardTokenContract }
         });
       }
     }, []);
@@ -31,7 +37,9 @@ function EthProvider({ children }) {
     const tryInit = async () => {
       try {
         const artifact = require("../../contracts/Staking.json");
-        init(artifact);
+        const rewardTokenArtifact = require("../../contracts/RewardToken.json");
+        init(artifact, rewardTokenArtifact);
+
       } catch (err) {
         console.error(err);
       }

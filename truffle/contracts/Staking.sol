@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 // Inspired by https://solidity-by-example.org/defi/staking-rewards/
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.15;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -47,7 +47,7 @@ contract Staking is ReentrancyGuard {
     /**
      * @dev nombre total de token staked
      */
-    uint256 private s_totalSupply;
+    uint256 public s_totalSupply;
 
     /**
      * @notice adresse => balance actuelle de staking
@@ -64,7 +64,7 @@ contract Staking is ReentrancyGuard {
      * @param _rewardsToken adresse de l'ERC20 de recompense
      */
     constructor( uint _rewardRate, address _stakingToken, address _rewardsToken ) {
-        REWARD_RATE = _rewardRate;
+        REWARD_RATE = _rewardRate*1e18;
         s_stakingToken = IERC20(_stakingToken);
         s_rewardsToken = IERC20(_rewardsToken);
     }
@@ -72,13 +72,13 @@ contract Staking is ReentrancyGuard {
     /**
      * @notice Valeur actuelle du reward pour un token staked
      */
-    function rewardPerToken() public view returns (uint256) {
+    function rewardPerToken() private view returns (uint256) {
         if (s_totalSupply == 0) {
             return s_rewardPerTokenStored;
         }
         return
             s_rewardPerTokenStored +
-            (((block.timestamp - s_lastUpdateTime) * REWARD_RATE /* * 1e18*/) / s_totalSupply);
+            (((block.timestamp - s_lastUpdateTime) * REWARD_RATE * 1e18) / s_totalSupply);
     }
 
     /**
@@ -86,8 +86,7 @@ contract Staking is ReentrancyGuard {
      */
     function earned(address _account) private view returns (uint256) {
         return
-            ((s_balances[_account] * (rewardPerToken() - s_userRewardPerTokenPaid[_account])) /*/
-                1e18 */) + s_rewards[_account];
+            ((s_balances[_account] * (rewardPerToken() - s_userRewardPerTokenPaid[_account])) / 1e18) + s_rewards[_account];
     }
 
     /**
@@ -110,7 +109,7 @@ contract Staking is ReentrancyGuard {
         s_totalSupply += amount;
         s_balances[msg.sender] += amount;
         emit Staked(msg.sender, amount);
-        bool success = true; //s_stakingToken.transferFrom(msg.sender, address(this), amount);
+        bool success = s_stakingToken.transferFrom(msg.sender, address(this), amount);
         if (!success) {
             revert TransferFailed();
         }
@@ -165,13 +164,6 @@ contract Staking is ReentrancyGuard {
      * @notice montant staked pour un user
      */
     function getStaked() external view returns (uint256) {
-        return s_balances[msg.sender];
-    }
-
-    /**
-     * @notice montant staked pour un user
-     */
-    function getStakedValue() external view returns (uint256) {
         return s_balances[msg.sender];
     }
 }
