@@ -29,6 +29,7 @@
     height: 100%;
     display: flex;
     overflow: hidden;
+    max-width: 1300px;
 }
 
 #App > .container #main{
@@ -37,4 +38,34 @@
 
 #App #main{
     width: 100vw;
+}
+
+#App .header-info{
+    display: flex;
+    justify-content: space-between;
+}
+
+#App .box-info{
+    padding: 2em;
+    background-color: #fff;
+    border-radius: 10px;
+    max-width: 300px;
+    flex: 1 1;
+}
+
+#App .box-info .title{
+    font-size: 1.1em;
+}
+
+#App .box-info .value{
+    margin: 15px 0;
+    font-family: sans-serif;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#App .general-details-graphics{
+    background-color: #fff;
+    margin: 1em 0;
+    padding: 1em;
 }
