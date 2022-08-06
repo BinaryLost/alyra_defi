@@ -94,8 +94,6 @@ export default function Staking() {
       const earned = await contract.methods
         .earned().call({ from: accounts[0] });
      const earnedForDisplay = (new BN(earned).div(decimals)).toString();
-     
-    
       
       setResult({
         staked: stakedForDisplay,

@@ -7,28 +7,27 @@ function EthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const init = useCallback(
-    async (artifact, rewardTokenArtifact) => {
-      if ((artifact)&&(rewardTokenArtifact)) {
+    async (artifact, stakingTokenArtifact) => {
+      if ((artifact)&&(stakingTokenArtifact)) {
         const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
         const accounts = await web3.eth.requestAccounts();
         const networkID = await web3.eth.net.getId();
         const { abi } = artifact;
-        const rewardTokenAbi  = rewardTokenArtifact.abi;
+        const stakingTokenAbi  = stakingTokenArtifact.abi;
 
-        let address, contract, rewardTokenAddress, rewardTokenContract;
+        let address, contract, stakingTokenContract;
         try {
           address = artifact.networks[networkID].address;
           contract = new web3.eth.Contract(abi, address);
 
-          rewardTokenAddress = rewardTokenArtifact.networks[networkID].address;
-          rewardTokenContract = new web3.eth.Contract(rewardTokenAbi, rewardTokenAddress);
+          stakingTokenContract = new web3.eth.Contract(stakingTokenAbi, "0x01BE23585060835E02B77ef475b0Cc51aA1e0709");
           
         } catch (err) {
           console.error(err);
         }
         dispatch({
           type: actions.init,
-          data: { artifact, rewardTokenArtifact, web3, accounts, networkID, contract, rewardTokenContract }
+          data: { artifact, stakingTokenArtifact, web3, accounts, networkID, contract, stakingTokenContract }
         });
       }
     }, []);
@@ -37,8 +36,8 @@ function EthProvider({ children }) {
     const tryInit = async () => {
       try {
         const artifact = require("../../contracts/Staking.json");
-        const rewardTokenArtifact = require("../../contracts/RewardToken.json");
-        init(artifact, rewardTokenArtifact);
+        const stakingTokenArtifact = require("../../contracts/IERC20.json");
+        init(artifact, stakingTokenArtifact);
 
       } catch (err) {
         console.error(err);
