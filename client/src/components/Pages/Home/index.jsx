@@ -20,6 +20,8 @@ function Home() {
     } = useEth();
 
     const [totalStaked, setTotalStaked] = useState(0);
+    const [nbStakers, setNbStakers] = useState(0);
+    
 
     useEffect(() => {
         async function f() {
@@ -29,6 +31,10 @@ function Home() {
             const decimals = new BN('1000000000000000000');
             const totalStakedForDisplay = (new BN(totalStaked).div(decimals)).toString();
             setTotalStaked(totalStakedForDisplay);
+
+            const totalStakers = await contract.methods
+            .totalStakers().call({ from: accounts[0] });
+            setNbStakers(totalStakers);
             }
         }
         f();
@@ -63,7 +69,7 @@ function Home() {
                         <div className="header-info">
                             <div className="box-info total-staked"><div className="title">Total staked</div><div className="value">{totalStaked}</div></div>
                             <div className="box-info apy-rate"><div className="title">APY Rate</div><div className="value">15%</div></div>
-                            <div className="box-info stakers"><div className="title">Stakers</div><div className="value">3 023 01</div></div>
+                            <div className="box-info stakers"><div className="title">Stakers</div><div className="value">{nbStakers}</div></div>
                         </div>
                         <div className="general-details">
                             <h2>Staking data</h2>
