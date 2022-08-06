@@ -26,7 +26,7 @@ function Home() {
             console.log("CONTRACT:  ", contract)
          if (contract) {
             const totalStaked = await contract.methods
-            .s_totalSupply().call({ from: accounts[0] });
+            .totalSupplied().call({ from: accounts[0] });
             const decimals = new BN('1000000000000000000');
             const totalStakedForDisplay = (new BN(totalStaked).div(decimals)).toString();
             setTotalStaked(totalStakedForDisplay);
