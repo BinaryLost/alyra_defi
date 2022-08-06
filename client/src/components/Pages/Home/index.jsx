@@ -23,7 +23,6 @@ function Home() {
 
     useEffect(() => {
         async function f() {
-            console.log("CONTRACT:  ", contract)
          if (contract) {
             const totalStaked = await contract.methods
             .totalSupplied().call({ from: accounts[0] });

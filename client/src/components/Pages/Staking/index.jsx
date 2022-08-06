@@ -1,6 +1,5 @@
 import Title from "../../Shared/Title";
 
-//import { useState } from "react"
 import { useState, useEffect, useRef } from 'react';
 import useEth from '../../../contexts/EthContext/useEth';
 import BN from 'bn.js'

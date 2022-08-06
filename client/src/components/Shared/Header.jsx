@@ -5,11 +5,11 @@ import {useEffect} from "react";
 
 
 function Header() {
-    const {state} = useEth();
+    const {state: {artifact, accounts}} = useEth();
 
     return (
         <header>
-            <Button clickable={false} id="connexion" text={!state.artifact ? "En attente de connexion ..." : state.accounts }
+            <Button clickable={false} id="connexion" text={!artifact ? "En attente de connexion ..." : accounts }
             />
         </header>
     );

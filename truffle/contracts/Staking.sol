@@ -13,42 +13,47 @@ contract Staking is ReentrancyGuard {
     /** 
      * @notice Token de recompense du protocole.
      */
-    IERC20 public s_rewardsToken;
+    IERC20 public rewardsToken;
 
     /**
      * @notice ERC20 a staker pour obtenir des recompenses
      */
-    IERC20 public s_stakingToken;
+    IERC20 public stakingToken;
 
     /** 
      * @notice Nombre de token de recompense crees par seconde
-       @dev recompenses seulement lorsque s_total != 0
+       @dev recompenses seulement lorsque total != 0
      */
     uint256 private REWARD_RATE;
 
     /** 
      * @notice timestamp de derniere maj des rewards par token
      */
-    uint256 private s_lastUpdateTime;
+    uint256 private lastUpdateTime;
     /**
      * @notice reward par token staked. Valeur uniquement croissante dans le temps. 
      */
-    uint256 private s_rewardPerTokenStored;
+    uint256 private rewardPerTokenStored;
 
     /**
      * @notice dette de recompenses de l'utilisateur. 
      *  egale a la valeur des rewards par token au moment ou l'utilisateur modifie son nombre de token staked.
      */
-    mapping(address => uint256) private s_userRewardPerTokenPaid;
+    mapping(address => uint256) private userRewardPerTokenPaid;
     /**
      * @notice recompenses de l'utilisateur memorisees avant modification des caracteristiques de son stake
      */
-    mapping(address => uint256) private s_rewards;
+    mapping(address => uint256) private rewards;
 
     /**
-     * @dev nombre total de token staked
+     * @notice nombre total de token staked
      */
-    uint256 public s_totalSupply;
+    uint256 public totalSupplied;
+
+    /**
+     * @notice nombre total de stakers
+     */
+    uint256 public totalStakers;
 
     /** 
      * chainlink pricefeed used for stake token $ valuation
@@ -58,7 +63,7 @@ contract Staking is ReentrancyGuard {
     /**
      * @notice adresse => balance actuelle de staking
      */
-    mapping(address => uint256) private s_balances;
+    mapping(address => uint256) private stakingBalances;
 
     event Staked(address indexed user, uint256 indexed amount);
     event WithdrewStake(address indexed user, uint256 indexed amount);
@@ -71,8 +76,8 @@ contract Staking is ReentrancyGuard {
      */
     constructor( uint _rewardRate, address _stakingToken, address _rewardsToken ) {
         REWARD_RATE = _rewardRate*1e18;
-        s_stakingToken = IERC20(_stakingToken);
-        s_rewardsToken = IERC20(_rewardsToken);
+        stakingToken = IERC20(_stakingToken);
+        rewardsToken = IERC20(_rewardsToken);
         priceFeed = AggregatorV3Interface(0xd8bD0a1cB028a31AA859A21A3758685a95dE4623);
     }
 
@@ -80,12 +85,12 @@ contract Staking is ReentrancyGuard {
      * @notice Valeur actuelle du reward pour un token staked
      */
     function rewardPerToken() private view returns (uint256) {
-        if (s_totalSupply == 0) {
-            return s_rewardPerTokenStored;
+        if (totalSupplied == 0) {
+            return rewardPerTokenStored;
         }
         return
-            s_rewardPerTokenStored +
-            (((block.timestamp - s_lastUpdateTime) * REWARD_RATE * 1e18) / s_totalSupply);
+            rewardPerTokenStored +
+            (((block.timestamp - lastUpdateTime) * REWARD_RATE * 1e18) / totalSupplied);
     }
 
     /**
@@ -93,7 +98,7 @@ contract Staking is ReentrancyGuard {
      */
     function earned(address _account) private view returns (uint256) {
         return
-            ((s_balances[_account] * (rewardPerToken() - s_userRewardPerTokenPaid[_account])) / 1e18) + s_rewards[_account];
+            ((stakingBalances[_account] * (rewardPerToken() - userRewardPerTokenPaid[_account])) / 1e18) + rewards[_account];
     }
 
     /**
@@ -113,10 +118,12 @@ contract Staking is ReentrancyGuard {
         nonReentrant
         moreThanZero(amount)
     {
-        s_totalSupply += amount;
-        s_balances[msg.sender] += amount;
+        if (stakingBalances[msg.sender]==0)
+            totalStakers++;
+        totalSupplied += amount;
+        stakingBalances[msg.sender] += amount;
         emit Staked(msg.sender, amount);
-        bool success = s_stakingToken.transferFrom(msg.sender, address(this), amount);
+        bool success = stakingToken.transferFrom(msg.sender, address(this), amount);
         if (!success) {
             revert TransferFailed();
         }
@@ -127,10 +134,12 @@ contract Staking is ReentrancyGuard {
      * @param amount | nombre de tokens a retirer
      */
     function withdraw(uint256 amount) external updateReward(msg.sender) nonReentrant {
-        s_totalSupply -= amount;
-        s_balances[msg.sender] -= amount;
+        totalSupplied -= amount;
+        stakingBalances[msg.sender] -= amount;
+        if (stakingBalances[msg.sender]==0)
+            totalStakers--;
         emit WithdrewStake(msg.sender, amount);
-        bool success = s_stakingToken.transfer(msg.sender, amount);
+        bool success = stakingToken.transfer(msg.sender, amount);
         if (!success) {
             revert TransferFailed();
         }
@@ -140,10 +149,10 @@ contract Staking is ReentrancyGuard {
      * @notice Recuperer l'ensemble des recompenses de staking
      */
     function claimReward() external updateReward(msg.sender) nonReentrant {
-        uint256 reward = s_rewards[msg.sender];
-        s_rewards[msg.sender] = 0;
+        uint256 reward = rewards[msg.sender];
+        rewards[msg.sender] = 0;
         emit RewardsClaimed(msg.sender, reward);
-        bool success = s_rewardsToken.transfer(msg.sender, reward);
+        bool success = rewardsToken.transfer(msg.sender, reward);
         if (!success) {
             revert TransferFailed();
         }
@@ -153,10 +162,10 @@ contract Staking is ReentrancyGuard {
     /* Modifiers  */
     /**************/
     modifier updateReward(address account) {
-        s_rewardPerTokenStored = rewardPerToken();
-        s_lastUpdateTime = block.timestamp;
-        s_rewards[account] = earned(account);
-        s_userRewardPerTokenPaid[account] = s_rewardPerTokenStored;
+        rewardPerTokenStored = rewardPerToken();
+        lastUpdateTime = block.timestamp;
+        rewards[account] = earned(account);
+        userRewardPerTokenPaid[account] = rewardPerTokenStored;
         _;
     }
 
@@ -171,7 +180,7 @@ contract Staking is ReentrancyGuard {
      * @notice montant staked pour un user
      */
     function getStaked() external view returns (uint256) {
-        return s_balances[msg.sender];
+        return stakingBalances[msg.sender];
     }
 
     function getStakedValue() external view returns (uint256) {
@@ -182,6 +191,6 @@ contract Staking is ReentrancyGuard {
             /*uint timeStamp*/,
             /*uint80 answeredInRound*/
         ) = priceFeed.latestRoundData();
-        return s_balances[msg.sender]*uint(price) / 1e6 ;
+        return stakingBalances[msg.sender]*uint(price) / 1e6 ;
     }
 }

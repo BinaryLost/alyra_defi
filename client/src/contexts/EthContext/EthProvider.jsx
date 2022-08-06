@@ -25,6 +25,7 @@ function EthProvider({ children }) {
         } catch (err) {
           console.error(err);
         }
+        console.log("DISPATCHING");
         dispatch({
           type: actions.init,
           data: { artifact, stakingTokenArtifact, web3, accounts, networkID, contract, stakingTokenContract }
@@ -50,14 +51,14 @@ function EthProvider({ children }) {
   useEffect(() => {
     const events = ["chainChanged", "accountsChanged"];
     const handleChange = () => {
-      init(state.artifact);
+      init(state.artifact, state.stakingTokenArtifact);
     };
 
     events.forEach(e => window.ethereum.on(e, handleChange));
     return () => {
       events.forEach(e => window.ethereum.removeListener(e, handleChange));
     };
-  }, [init, state.artifact]);
+  }, [init, state.artifact, state.stakingTokenArtifact]);
 
   return (
     <EthContext.Provider value={{
