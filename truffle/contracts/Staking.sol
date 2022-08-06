@@ -4,6 +4,7 @@ pragma solidity ^0.8.15;
 
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 error TransferFailed();
 error NeedsMoreThanZero();
@@ -49,6 +50,11 @@ contract Staking is ReentrancyGuard {
      */
     uint256 public s_totalSupply;
 
+    /** 
+     * chainlink pricefeed used for stake token $ valuation
+     */
+    AggregatorV3Interface private priceFeed;
+
     /**
      * @notice adresse => balance actuelle de staking
      */
@@ -67,6 +73,7 @@ contract Staking is ReentrancyGuard {
         REWARD_RATE = _rewardRate*1e18;
         s_stakingToken = IERC20(_stakingToken);
         s_rewardsToken = IERC20(_rewardsToken);
+        priceFeed = AggregatorV3Interface(0xd8bD0a1cB028a31AA859A21A3758685a95dE4623);
     }
 
     /**
@@ -165,5 +172,16 @@ contract Staking is ReentrancyGuard {
      */
     function getStaked() external view returns (uint256) {
         return s_balances[msg.sender];
+    }
+
+    function getStakedValue() external view returns (uint256) {
+         (
+            /*uint80 roundID*/,
+            int price,
+            /*uint startedAt*/,
+            /*uint timeStamp*/,
+            /*uint80 answeredInRound*/
+        ) = priceFeed.latestRoundData();
+        return s_balances[msg.sender]*uint(price) / 1e6 ;
     }
 }
