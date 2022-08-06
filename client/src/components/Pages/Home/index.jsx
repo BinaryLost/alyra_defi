@@ -1,4 +1,8 @@
 import Title from "../../Shared/Title";
+import useEth from '../../../contexts/EthContext/useEth';
+import { useEffect, useState } from 'react';
+import BN from 'bn.js';
+
 
 import {
     LineChart,
@@ -11,10 +15,29 @@ import {
 } from "recharts";
 
 function Home() {
+    const {
+        state: { contract, accounts },
+    } = useEth();
 
+    const [totalStaked, setTotalStaked] = useState(0);
+
+    useEffect(() => {
+        async function f() {
+            console.log("CONTRACT:  ", contract)
+         if (contract) {
+            const totalStaked = await contract.methods
+            .s_totalSupply().call({ from: accounts[0] });
+            const decimals = new BN('1000000000000000000');
+            const totalStakedForDisplay = (new BN(totalStaked).div(decimals)).toString();
+            setTotalStaked(totalStakedForDisplay);
+            }
+        }
+        f();
+        }, [contract, accounts]);
+    
     const data = [
         {
-            name: "july",
+             name: "july",
             staked: 4000,
             stakers: 2400,
             amt: 2400
@@ -39,7 +62,7 @@ function Home() {
                     <Title text="Accueil" />
                     <div className="main-page">
                         <div className="header-info">
-                            <div className="box-info total-staked"><div className="title">Total staked</div><div className="value">1 453 023 01</div></div>
+                            <div className="box-info total-staked"><div className="title">Total staked</div><div className="value">{totalStaked}</div></div>
                             <div className="box-info apy-rate"><div className="title">APY Rate</div><div className="value">15%</div></div>
                             <div className="box-info stakers"><div className="title">Stakers</div><div className="value">3 023 01</div></div>
                         </div>
