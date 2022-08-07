@@ -22,6 +22,8 @@ Ainsi les tokens LINK déjà présents sur le compte du testnet sont aussi prés
 Le pricefeed chainlink de ce token peut aussi être interrogé depuis Ganache à la meme adresse que sur Rinkeby.
 Le cours est remis à jour à chaque lancement de Ganache.
 
+Par ailleurs, un script shell force Ganache à miner un block toutes les n secondes afin de visualiser les récompenses de staking qui augmentent automatiquement.
+
 ~/alyra_defi/truffle$ truffle test
 Using network 'development'.
 
