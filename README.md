@@ -11,15 +11,19 @@
 
 ## Tests unitaires du contrat "Staking"
 
+Pour les tests unitaires, on forke le testnet Rinkeby avec Ganache :
+ganache-cli -m "MNEMONIC" --fork https://rinkeby.infura.io/v3/ID
 
-
+Ainsi les tokens LINK déjà présents sur le compte du testnet sont aussi présents dans Ganache. 
+Le pricefeed chainlink de ce token peut aussi être interrogé depuis Ganache à la meme adresse que sur Rinkeby.
+Le cours est remis à jour à chaque lancement de Ganache.
 
 ~/alyra_defi/truffle$ truffle test
 Using network 'development'.
 
 Compiling your contracts...
 ===========================
-> Everything is up to date, there is nothing to compile.
+Everything is up to date, there is nothing to compile.
 Reward Token Address 0x992055D40Ff2AD47dDfa6cB0A6c8Da67A3efdf2d
 Staking Contract Address 0xB99030BECE3bb5cb868dCcf768A8C6c375aD1408
 
