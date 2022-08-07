@@ -1,6 +1,6 @@
 import { EthProvider } from "./contexts/EthContext";
 import Home from "./components/Pages/Home";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Staking from "./components/Pages/Staking";
 import "./App.css";
 import Menu from "./components/Shared/Menu";

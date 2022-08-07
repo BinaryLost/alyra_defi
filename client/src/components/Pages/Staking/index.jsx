@@ -108,6 +108,7 @@ export default function Staking() {
   return (
     <>
       <Title/>
+      <div className="staking">
       <h3>
         Staked Amount {result.staked} Staked Value {result.stakedValue} earned {result.earned}
       </h3>
@@ -115,10 +116,11 @@ export default function Staking() {
       <input id="tokensToStake" type="number" />
       <button onClick={(e) => stake(e)}>Stake</button>
       <br />
-      <button onClick={(e) => claim(e)}>Claim</button>
-      <br />
       <input id="tokensToWithdraw" type="number" />
       <button onClick={(e) => withdraw(e)}>Withdraw</button>
+      <br/>
+      <button onClick={(e) => claim(e)}>Claim</button>
+      </div>
     </>
   );
 }
