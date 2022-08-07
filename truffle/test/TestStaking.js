@@ -11,7 +11,7 @@ contract("Staking", function (accounts) {
 
     let stakingInstance, rewardContract, stakingToken;
 
-    describe.skip("Stake tokens", async function() {
+    describe("Stake tokens", async function() {
 
         beforeEach(async function () {
             // staking token can be whatever ERC we choose. Here LINK on rinkeby 
