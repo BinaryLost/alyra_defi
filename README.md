@@ -9,6 +9,10 @@
 
 ## ...
 
+## DAPP Staking
+
+Le contrat permet de staker des tokens LINK et distribue 10 "RewardToken" par seconde répartis de manière proportionnelle entre tous les participants.
+
 ## Tests unitaires du contrat "Staking"
 
 Pour les tests unitaires, on forke le testnet Rinkeby avec Ganache :
