@@ -39,7 +39,7 @@ contract Staking is ReentrancyGuard {
      * @notice dette de recompenses de l'utilisateur. 
      *  egale a la valeur des rewards par token au moment ou l'utilisateur modifie son nombre de token staked.
      */
-    mapping(address => uint256) private userRewardPerTokenPaid;
+    mapping(address => uint256) private userDebtPerToken;
     /**
      * @notice recompenses de l'utilisateur memorisees avant modification des caracteristiques de son stake
      */
@@ -98,7 +98,7 @@ contract Staking is ReentrancyGuard {
      */
     function earned(address _account) private view returns (uint256) {
         return
-            ((stakingBalances[_account] * (rewardPerToken() - userRewardPerTokenPaid[_account])) / 1e18) + rewards[_account];
+            ((stakingBalances[_account] * (rewardPerToken() - userDebtPerToken[_account])) / 1e18) + rewards[_account];
     }
 
     /**
@@ -165,7 +165,7 @@ contract Staking is ReentrancyGuard {
         rewardPerTokenStored = rewardPerToken();
         lastUpdateTime = block.timestamp;
         rewards[account] = earned(account);
-        userRewardPerTokenPaid[account] = rewardPerTokenStored;
+        userDebtPerToken[account] = rewardPerTokenStored;
         _;
     }
 
