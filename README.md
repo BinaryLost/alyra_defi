@@ -26,7 +26,7 @@ Le cours est remis à jour à chaque lancement de Ganache.
 Using network 'development'.
 
 Compiling your contracts...
-===========================
+
 Everything is up to date, there is nothing to compile.
 Reward Token Address 0x992055D40Ff2AD47dDfa6cB0A6c8Da67A3efdf2d
 Staking Contract Address 0xB99030BECE3bb5cb868dCcf768A8C6c375aD1408
