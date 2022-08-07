@@ -11499,7 +11499,7 @@
       },
       "links": {},
       "address": "0x143044BEC1E1a6f710F2BFA4eF34a823392136Ba",
-      "transactionHash": "0x2429ae850f120bc9d4267cd161c22d0b8ddad99e48293f9dbf2a8cc3cb570c4c"
+      "transactionHash": "0x12d3bcd37372a50acece1f009e5ad09185163ae02889db8048ab58d753f97d00"
     },
     "1659683942423": {
       "events": {
@@ -11674,7 +11674,7 @@
     }
   },
   "schemaVersion": "3.4.7",
-  "updatedAt": "2022-08-07T19:14:06.664Z",
+  "updatedAt": "2022-08-07T20:02:26.644Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
