@@ -1,7 +1,6 @@
 import "./Header.css";
 import Button from "./Button";
 import useEth from "../../contexts/EthContext/useEth";
-import {useEffect} from "react";
 
 
 function Header() {
